@@ -1,16 +1,16 @@
 import MediaPlayer from "../../MediaPlayer";
-import Ads, {Ad} from "./Ads"
+import Asd, {Ad} from "./Ads"
 
 
 class adsPlugin{
-    private ads: Ads;
+    private ads: Asd;
     private player: MediaPlayer;
     private media: HTMLMediaElement;
     private currentAd: Ad;
     private adsContainer: HTMLElement;
 
     constructor(){
-        this.ads = Ads.getInstance()
+        this.ads = Asd.getInstance()
         this.adsContainer = document.createElement('div');
         this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
 

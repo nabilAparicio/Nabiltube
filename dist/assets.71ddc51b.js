@@ -130,11 +130,18 @@ function () {
   function MediaPlayer(config) {
     this.media = config.el;
     this.plugins = config.plugins || [];
-
-    this._initPlugins();
+    this.initPlayer();
+    this.initPlugins();
   }
 
-  MediaPlayer.prototype._initPlugins = function () {
+  MediaPlayer.prototype.initPlayer = function () {
+    this.container = document.createElement('div');
+    this.container.style.position = 'relative';
+    this.media.parentNode.insertBefore(this.container, this.media);
+    this.container.appendChild(this.media);
+  };
+
+  MediaPlayer.prototype.initPlugins = function () {
     var _this = this;
 
     this.plugins.forEach(function (plugin) {
@@ -320,7 +327,7 @@ function () {
   };
 
   Asd.prototype.getAd = function () {
-    if (this.ads.length === 0) {
+    if (this.ads.length == 0) {
       this.initAds();
     }
 
@@ -351,11 +358,13 @@ var adsPlugin =
 function () {
   function adsPlugin() {
     this.ads = Ads_1.default.getInstance();
+    this.adsContainer = document.createElement('div');
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this);
   }
 
   adsPlugin.prototype.run = function (player) {
     this.player = player;
+    this.player.container.appendChild(this.adsContainer);
     this.media = this.player.media;
     this.media.addEventListener('timeupdate', this.handleTimeUpdate);
   };
@@ -369,8 +378,20 @@ function () {
   };
 
   adsPlugin.prototype.renderAd = function () {
+    var _this = this;
+
+    if (this.currentAd) {
+      return;
+    }
+
     var ad = this.ads.getAd();
-    console.log(ad);
+    this.currentAd = ad;
+    this.adsContainer.innerHTML = " <div class=\"ads\">\n      <a  class=\"ads__link\" href=\"" + this.currentAd.url + "\" target=\"_blank\">\n        <img class=\"ads__img\" src=\"" + this.currentAd.imageUrl + "\" />\n        <div class=\"ads__info\">\n          <h5 class=\"ads__title\">" + this.currentAd.title + "</h5>\n          <p class=\"ads__body\">" + this.currentAd.body + "</p>\n        </div>\n      </a>\n    </div>";
+    setTimeout(function () {
+      _this.currentAd = null;
+      _this.adsContainer.innerHTML = '';
+    }, 10000);
+    console.log(this.currentAd);
   };
 
   return adsPlugin;
@@ -452,7 +473,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42393" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36615" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

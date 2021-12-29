@@ -101,7 +101,7 @@ class Asd{
     }
 
     getAd(){
-        if(this.ads.length === 0 ){
+        if(this.ads.length == 0 ){
             this.initAds();
         }
         this.ads.pop();
